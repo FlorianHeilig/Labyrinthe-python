@@ -14,7 +14,7 @@ next_move = 0 #tic avant déplacement
 fruit_pos = Pos(random.randint(0, size[0] - 1), random.randint(0, size[1] - 1))
 score = 0
 snake_pos = Pos(0,1)
-snake_body = [(snake_pos.x, snake_pos.y)] 
+snake_body = [Pos(snake_pos.x, snake_pos.y)] 
 
 # color
 ground_color = "#EDDACF"
@@ -32,7 +32,8 @@ show_pos = False
 
 direction = "UP"
 
-snake_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
+snake_pos = Pos(int(size[0]/8), int(size[1]/2))
+snake_length = 3
 
 #tour de boucle, pour chaque FPS
 while running:
@@ -85,6 +86,11 @@ while running:
         if snake_pos.x > size[0]-1:
             snake_pos.x = size[0]-1
 
+        #print(snake_pos.x,"-", snake_pos.y)
+        snake_body.append(Pos(snake_pos.x, snake_pos.y))
+        while len(snake_body)>snake_length:
+            del snake_body[0]
+
         if show_pos:
             print("pos: ",snake_pos)
 
@@ -97,7 +103,9 @@ while running:
             pygame.draw.line(screen,grid_color, (0, tilesize*i), (tilesize*size[0], tilesize*i) )
 
     #affichage du joueur
-    pygame.draw.rect(screen, snake_color, pygame.Rect(snake_pos.x*tilesize, snake_pos.y*tilesize, tilesize, tilesize))
+    for elt in snake_body:
+        pygame.draw.rect(screen, snake_color, pygame.Rect(elt.x*tilesize, elt.y*tilesize, tilesize, tilesize))
+    
     pygame.draw.rect(screen, fruit_color, pygame.Rect(fruit_pos.x*tilesize, fruit_pos.y*tilesize, tilesize, tilesize))
     pygame.display.flip()
     dt = clock.tick(fps)
