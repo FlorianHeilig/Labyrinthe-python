@@ -30,7 +30,7 @@ dt = 0
 show_grid = True
 show_pos = False
 
-keys= { "UP":0 , "DOWN":0, "LEFT":0, "RIGHT":0 }
+direction = "UP"
 
 snake_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
 
@@ -45,31 +45,14 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z or event.key == pygame.K_UP:
-                keys['UP'] = 1
+                direction = 'UP'
             if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                keys['DOWN'] = 1
+                direction = 'DOWN'
             if event.key == pygame.K_q or event.key == pygame.K_LEFT:
-                keys['LEFT'] = 1
+                direction = 'LEFT'
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                keys['RIGHT'] = 1
+                direction = 'RIGHT'
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_z or event.key == pygame.K_UP:
-                keys['UP'] = 0
-            if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                keys['DOWN'] = 0
-            if event.key == pygame.K_q or event.key == pygame.K_LEFT:
-                keys['LEFT'] = 0
-            if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                keys['RIGHT'] = 0
-
-            if event.key == pygame.K_ESCAPE:
-                running = False
-            if event.key == pygame.K_g:
-                show_grid = not show_grid
-            if event.key == pygame.K_p:
-                show_pos = not show_pos
-        
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             print("mouse_pos:", pos)
@@ -79,16 +62,16 @@ while running:
     next_move += dt
     # gestion des déplacements
     if next_move>0:
-        if keys['UP'] == 1:
+        if direction == 'UP':
             snake_pos.y -= 1
             next_move = -snake_speed
-        elif keys['DOWN'] == 1:
+        elif direction == 'DOWN':
             snake_pos.y += 1
             next_move = -snake_speed
-        elif keys['LEFT'] == 1:
+        elif direction == 'LEFT':
             snake_pos.x -= 1
             next_move = -snake_speed
-        elif keys['RIGHT'] == 1:
+        elif direction == 'RIGHT':
             snake_pos.x += 1
             next_move = -snake_speed
 
