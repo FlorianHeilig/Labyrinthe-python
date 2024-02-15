@@ -1,6 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 import random
+from utils import Pos
 # pygame setup
 pygame.init()
 
@@ -8,13 +9,18 @@ pygame.init()
 tilesize = 32 # taille d'une tuile IG
 size = (20, 10) # taille du monde
 fps = 30 # fps du jeu
-player_speed = 150 # vitesse du joueur
+snake_speed = 150 # vitesse du joueur
 next_move = 0 #tic avant déplacement
+fruit_pos = Pos(random.randint(0, size[0] - 1), random.randint(0, size[1] - 1))
+score = 0
+snake_pos = Pos(0,1)
+snake_body = [(snake_pos.x, snake_pos.y)] 
 
 # color
 ground_color = "#EDDACF"
 grid_color = "#7F513D"
-player_color = "#9F715D"
+snake_color = "#9F715D"
+fruit_color = "#10015D"
 
 
 screen = pygame.display.set_mode((size[0]*tilesize, size[1]*tilesize))
@@ -26,7 +32,7 @@ show_pos = False
 
 keys= { "UP":0 , "DOWN":0, "LEFT":0, "RIGHT":0 }
 
-player_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
+snake_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
 
 #tour de boucle, pour chaque FPS
 while running:
@@ -74,30 +80,30 @@ while running:
     # gestion des déplacements
     if next_move>0:
         if keys['UP'] == 1:
-            player_pos.y -= 1
-            next_move = -player_speed
+            snake_pos.y -= 1
+            next_move = -snake_speed
         elif keys['DOWN'] == 1:
-            player_pos.y += 1
-            next_move = -player_speed
+            snake_pos.y += 1
+            next_move = -snake_speed
         elif keys['LEFT'] == 1:
-            player_pos.x -= 1
-            next_move = -player_speed
+            snake_pos.x -= 1
+            next_move = -snake_speed
         elif keys['RIGHT'] == 1:
-            player_pos.x += 1
-            next_move = -player_speed
+            snake_pos.x += 1
+            next_move = -snake_speed
 
         # vérification du déplacement du joueur
-        if player_pos.y < 0:
-            player_pos.y = 0
-        if player_pos.y >= size[1]:
-            player_pos.y = size[1]-1
-        if player_pos.x < 0:
-            player_pos.x = 0
-        if player_pos.x > size[0]-1:
-            player_pos.x = size[0]-1
+        if snake_pos.y < 0:
+            snake_pos.y = 0
+        if snake_pos.y >= size[1]:
+            snake_pos.y = size[1]-1
+        if snake_pos.x < 0:
+            snake_pos.x = 0
+        if snake_pos.x > size[0]-1:
+            snake_pos.x = size[0]-1
 
         if show_pos:
-            print("pos: ",player_pos)
+            print("pos: ",snake_pos)
 
 
     # affichage des différents composants
@@ -108,8 +114,8 @@ while running:
             pygame.draw.line(screen,grid_color, (0, tilesize*i), (tilesize*size[0], tilesize*i) )
 
     #affichage du joueur
-    pygame.draw.rect(screen, player_color, pygame.Rect(player_pos.x*tilesize, player_pos.y*tilesize, tilesize, tilesize))
-
+    pygame.draw.rect(screen, snake_color, pygame.Rect(snake_pos.x*tilesize, snake_pos.y*tilesize, tilesize, tilesize))
+    pygame.draw.rect(screen, fruit_color, pygame.Rect(fruit_pos.x*tilesize, fruit_pos.y*tilesize, tilesize, tilesize))
     pygame.display.flip()
     dt = clock.tick(fps)
 
